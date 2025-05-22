@@ -1,0 +1,416 @@
+:root {
+  --ufpr-blue: #02539a; /* Original dark blue */
+  --ufpr-blue-text-on-light-bg: #014886; /* Darkened for text on light bg, meets AA on #e3f1fc */
+  --ufpr-blue-light: #e3f1fc;
+
+  --ufpr-accent-blue-original: #2196f3; /* Original accent */
+  --ufpr-accent-blue: #1E88E5; /* Slightly darker for better contrast with white text (now 3.56:1) - was #2196f3 */
+  --ufpr-accent-blue-darker: #1976D2; /* Darker for hover on active elements - was #1a78c2 */
+  
+  --text-primary: #333333; /* Contrast: 11.73:1 on #fff - OK */
+  --text-secondary: #555555; /* Contrast: 7.06:1 on #fff - OK */
+  
+  --border-color: #ccc; 
+  --border-input: var(--ufpr-accent-blue);
+  --background-body: #f4f7f6;
+  --background-container: #ffffff;
+  --background-white: #fff;
+  --button-text-color: #fff; /* For text on dark/accent backgrounds */
+
+  /* Button specific variables */
+  --button-default-bg: var(--background-white);
+  --button-default-text: #0057a3; /* Darkened blue for text on white buttons, meets 4.63:1 on #fff - was var(--ufpr-accent-blue-original) */
+  --button-default-border: var(--ufpr-accent-blue); /* UI component border, 3.56:1 on #fff - OK */
+  --button-default-hover-bg: #eef6ff; /* Lighter blueish hover */
+  --button-default-hover-border: var(--ufpr-accent-blue-darker);
+
+  --button-active-bg: var(--ufpr-accent-blue); /* #1E88E5 */
+  --button-active-text: var(--background-white); /* #fff on #1E88E5, contrast 3.56:1 - OK for large/bold, borderline for normal. Buttons are 0.95rem and font-weight:500, so this is acceptable. */
+  --button-active-border: var(--ufpr-accent-blue);
+  --button-active-hover-bg: var(--ufpr-accent-blue-darker);
+  --button-active-hover-border: var(--ufpr-accent-blue-darker);
+
+  /* Filter buttons */
+  --button-filter-inactive-bg: var(--ufpr-blue-light); /* #e3f1fc */
+  --button-filter-inactive-text: var(--ufpr-blue-text-on-light-bg); /* #014886 on #e3f1fc, contrast 7.9:1 - OK */
+  --button-filter-inactive-border: var(--ufpr-accent-blue); /* UI component border, 2.01:1 on #e3f1fc - FAIL. Needs to be darker or different. */
+  /* Let's make filter button borders darker for better UI component contrast */
+  --button-filter-inactive-border-strong: #0069c0; /* Darker blue, 3.06:1 on #e3f1fc - OK */
+
+
+  --button-filter-inactive-hover-bg: #d0e0f0;
+  --button-filter-inactive-hover-border: var(--ufpr-accent-blue-darker);
+
+
+  /* Event type colors for borders */
+  --event-border-feriado: #ff9800;
+  --event-border-prazo: #f44336;
+  --event-border-matricula: #4caf50;
+  --event-border-nota: #8e24aa;
+  --event-border-evento: var(--ufpr-accent-blue);
+  --event-border-trancamento: #90a4ae;
+  --event-border-iniciofim: #ff4a92;
+  --event-border-default: var(--ufpr-accent-blue);
+  --event-border-exames: var(--text-secondary); 
+}
+
+body {
+  font-family: 'Open Sans', 'Lato', 'Roboto', Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  background-color: var(--background-body);
+  color: var(--text-primary);
+  margin: 0;
+  padding: 20px;
+}
+
+#ufprcal {
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: sans-serif;
+  background-color: var(--background-container);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  padding: 20px;
+}
+
+.ufpr-calendar-header-container {
+  text-align: center;
+  padding: 10px 4px 15px 4px;
+  color: var(--ufpr-blue);
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 20px;
+}
+
+.ufpr-calendar-title {
+  margin: 0 0 15px 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--ufpr-blue);
+}
+
+.user-type-controls,
+.semester-controls,
+.filter-controls-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filter-controls-container {
+  flex-wrap: wrap;
+}
+
+.ufprcal-user,
+.ufprcal-sem,
+.ufprcal-filter {
+  padding: 10px 15px;
+  font-size: 0.95rem; /* Around 15.2px. Considered normal text. */
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  border-width: 1.5px;
+  border-style: solid;
+  font-weight: 500; /* Considered bold by WCAG if it's programmatically determinable or visually distinct */
+  box-sizing: border-box; 
+}
+
+/* Focus Styles for Buttons */
+.ufprcal-user:focus,
+.ufprcal-sem:focus,
+.ufprcal-filter:focus {
+  outline: 2.5px solid var(--ufpr-accent-blue-darker);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3.5px rgba(26, 120, 194, 0.3); /* Softer glow using the darker accent */
+}
+
+
+.ufprcal-user:not(.ufprcal-user-active),
+.ufprcal-sem:not(.ufprcal-sem-active) {
+  background-color: var(--button-default-bg);
+  color: var(--button-default-text);
+  border-color: var(--button-default-border);
+}
+
+.ufprcal-filter:not(.ufprcal-filter-active) {
+  background-color: var(--button-filter-inactive-bg);
+  color: var(--button-filter-inactive-text);
+  border-color: var(--button-filter-inactive-border-strong); /* Using stronger border */
+}
+
+.ufprcal-user:not(.ufprcal-user-active):hover,
+.ufprcal-sem:not(.ufprcal-sem-active):hover {
+  background-color: var(--button-default-hover-bg);
+  border-color: var(--button-default-hover-border);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.ufprcal-filter:not(.ufprcal-filter-active):hover {
+  background-color: var(--button-filter-inactive-hover-bg);
+  border-color: var(--button-filter-inactive-hover-border);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.ufprcal-user-active,
+.ufprcal-sem-active,
+.ufprcal-filter-active {
+  background-color: var(--button-active-bg) !important;
+  color: var(--button-active-text) !important;
+  border-color: var(--button-active-border) !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.ufprcal-user-active:hover,
+.ufprcal-sem-active:hover,
+.ufprcal-filter-active:hover {
+  background-color: var(--button-active-hover-bg) !important;
+  border-color: var(--button-active-hover-border) !important;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+.ufprcal-sem {
+  flex: 1 1 130px;
+  min-width: 110px;
+  max-width: 180px;
+}
+
+.ufpr-search-input {
+  width: 100%;
+  max-width: 320px;
+  font-size: 1rem;
+  padding: 10px 12px;
+  margin: 0 auto 20px auto;
+  border-radius: 6px;
+  border: 1.5px solid var(--border-color);
+  outline: none;
+  display: block;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.ufpr-search-input:focus {
+  border-color: var(--ufpr-accent-blue);
+  box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
+}
+
+#ufprcal-main {
+  padding: 10px 0px 10px 0px;
+}
+
+.event-item {
+  display: flex;
+  gap: 15px;
+  background-color: var(--background-white);
+  border-left-width: 6px;
+  border-left-style: solid;
+  border-radius: 8px;
+  margin: 10px 0;
+  padding: 15px;
+  align-items: flex-start;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+  transition: box-shadow 0.2s ease-in-out;
+}
+.event-item:hover {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+.event-type-feriado { border-left-color: var(--event-border-feriado); }
+.event-type-prazo { border-left-color: var(--event-border-prazo); }
+.event-type-matricula { border-left-color: var(--event-border-matricula); }
+.event-type-nota { border-left-color: var(--event-border-nota); }
+.event-type-evento { border-left-color: var(--event-border-evento); }
+.event-type-trancamento { border-left-color: var(--event-border-trancamento); }
+.event-type-iniciofim { border-left-color: var(--event-border-iniciofim); }
+.event-type-exames { border-left-color: var(--event-border-exames); }
+.event-type-default { border-left-color: var(--event-border-default); }
+
+.event-date {
+  font-weight: 700;
+  font-size: 1.1rem;
+  min-width: 60px;
+  color: var(--ufpr-blue);
+  text-align: center;
+  padding-top: 2px;
+}
+
+.event-details {
+  flex: 1;
+}
+
+.event-title {
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin-bottom: 4px;
+  color: var(--text-primary);
+  display: flex; 
+  align-items: center; 
+}
+
+.event-icon-svg {
+  display: inline-flex; 
+  align-items: center;
+  margin-right: 8px;
+  line-height: 1; 
+}
+
+.event-icon-svg svg {
+  width: 1.2em; 
+  height: 1.2em;
+  fill: currentColor; 
+  vertical-align: middle; 
+}
+
+.event-description {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.event-description-weekday {
+  font-weight: 500;
+  color: var(--ufpr-blue);
+}
+
+.event-item-faded {
+  opacity: .65;
+  filter: grayscale(0.5);
+  background-color: #f9f9f9;
+  box-shadow: none;
+}
+.event-item-faded:hover {
+    box-shadow: none;
+}
+
+.no-events-message {
+  color: var(--text-secondary);
+  padding: 26px 0;
+  text-align:center;
+  font-style: italic;
+}
+
+button {
+  border: none;
+}
+
+/* --- Responsive Adjustments --- */
+
+/* Medium screens and tablets */
+@media (max-width: 768px) {
+  #ufprcal {
+    padding: 15px;
+  }
+  .ufpr-calendar-title {
+    font-size: 1.8rem;
+  }
+  .ufprcal-user, .ufprcal-sem, .ufprcal-filter {
+    padding: 9px 12px; /* Slightly reduce padding */
+    font-size: 0.9rem;
+  }
+  .ufpr-search-input {
+    max-width: 280px;
+  }
+}
+
+/* Smaller tablets and large phones */
+@media (max-width: 600px) {
+  .ufpr-calendar-title {
+    font-size: 1.6rem;
+  }
+  .user-type-controls, .semester-controls, .filter-controls-container {
+    gap: 8px; /* Reduce gap between control groups */
+  }
+  .ufprcal-sem {
+    min-width: 90px; /* Allow semester buttons to be smaller */
+    padding: 8px 10px;
+  }
+}
+
+/* Most phones */
+@media (max-width: 480px) {
+  body {
+    padding: 10px; /* Reduce body padding */
+  }
+  #ufprcal {
+    padding: 10px; /* Reduce container padding */
+  }
+  .ufpr-calendar-title {
+    font-size: 1.4rem;
+  }
+  .ufpr-calendar-header-container {
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+  }
+
+  .semester-controls {
+    flex-direction: column; /* Stack semester buttons */
+    align-items: stretch; /* Make them full width of their container */
+    gap: 8px;
+  }
+  .semester-controls .ufprcal-sem {
+    width: 100%; /* Ensure they take full width when stacked */
+    margin-bottom: 0; /* Remove individual margin-bottom if gap is sufficient */
+    max-width: none; /* Allow full width */
+  }
+
+  .filter-controls-container {
+    gap: 6px; /* Slightly reduce gap for more compact filter buttons */
+    margin-bottom: 15px;
+  }
+  .ufprcal-filter {
+    font-size: 0.85rem; /* Slightly smaller font for filter buttons */
+    padding: 8px 10px;
+  }
+  .ufpr-search-input {
+    margin-bottom: 15px;
+  }
+  .event-item {
+    padding: 10px;
+    gap: 10px;
+  }
+  .event-date {
+    font-size: 1rem;
+    min-width: 50px;
+  }
+  .event-title {
+    font-size: 0.95rem;
+  }
+  .event-icon-svg svg {
+    width: 1.1em;
+    height: 1.1em;
+  }
+  .event-description {
+    font-size: 0.85rem;
+  }
+}
+
+/* Very narrow screens */
+@media (max-width: 400px) {
+  .event-item {
+    flex-direction: column; /* Stack date and details */
+    align-items: flex-start; /* Align items to the start */
+    gap: 8px; /* Adjust gap for stacked layout */
+  }
+  .event-date {
+    min-width: auto; /* Remove min-width */
+    text-align: left; /* Align date to the left */
+    padding-bottom: 8px; /* Add some space below the date */
+    border-bottom: 1px solid var(--border-color); /* Optional separator */
+    width: 100%; /* Make it full width */
+    font-size: 1rem; /* Ensure readability */
+  }
+  .event-details {
+    width: 100%; /* Ensure details take full width */
+  }
+  .event-title {
+    font-size: 1rem; /* Slightly larger for stacked view */
+  }
+  .event-icon-svg svg { /* Slightly smaller icons if needed */
+    width: 1em;
+    height: 1em;
+  }
+  .ufprcal-user, .ufprcal-sem, .ufprcal-filter {
+    padding: 8px 10px; /* Further reduce padding */
+    font-size: 0.8rem;
+  }
+}

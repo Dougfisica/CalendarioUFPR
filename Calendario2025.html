@@ -1,0 +1,36 @@
+<head>
+  <meta charset="UTF-8">
+  <title>Calendário UFPR 2025</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="ufprcal">
+  <div class="ufpr-calendar-header-container">
+    <h1 class="ufpr-calendar-title">Calendário UFPR 2025</h1>
+    <div class="user-type-controls">
+      <button id="ufprcal-btn-aluno" class="ufprcal-user ufprcal-user-active" onclick="ufprcalSetUser('aluno')">Aluno</button>
+      <button id="ufprcal-btn-prof" class="ufprcal-user" onclick="ufprcalSetUser('professor')">Professor</button>
+    </div>
+    <div class="semester-controls">
+      <button id="sem1" class="ufprcal-sem ufprcal-sem-active" data-sem="1" onclick="ufprcalSetSemester(1)">1º SEMESTRE</button>
+      <button id="sem2" class="ufprcal-sem" data-sem="2" onclick="ufprcalSetSemester(2)">2º SEMESTRE</button>
+    </div>
+    <input id="ufprcal-search" class="ufpr-search-input" type="text" placeholder="Buscar evento..." />
+    <div class="filter-controls-container">
+      <button id="filt-all" class="ufprcal-filter ufprcal-filter-active" data-type="all" onclick="ufprcalSetFilter('all')">Todos</button>
+      <button id="filt-iniciofim" class="ufprcal-filter" data-type="iniciofim" onclick="ufprcalSetFilter('iniciofim')">Início/Fim</button>
+      <button id="filt-exames" class="ufprcal-filter" data-type="exames" onclick="ufprcalSetFilter('exames')">Exames</button>
+      <button id="filt-feriado" class="ufprcal-filter" data-type="feriado" onclick="ufprcalSetFilter('feriado')">Feriados</button>
+      <button id="filt-matricula" class="ufprcal-filter" data-type="matricula" onclick="ufprcalSetFilter('matricula')">Matrícula</button>
+      <button id="filt-nota" class="ufprcal-filter" data-type="nota" onclick="ufprcalSetFilter('nota')">Notas</button>
+      <button id="filt-trancamento" class="ufprcal-filter" data-type="trancamento" onclick="ufprcalSetFilter('trancamento')">Trancamento</button>
+      <button id="filt-evento" class="ufprcal-filter" data-type="evento" onclick="ufprcalSetFilter('evento')">Eventos</button>
+      <button id="filt-prazo" class="ufprcal-filter" data-type="prazo" onclick="ufprcalSetFilter('prazo')">Prazos</button>
+    </div>
+  </div>
+  <div id="ufprcal-main">
+    <!-- Event items will be rendered here by JavaScript -->
+  </div>
+  <script src="script.js" defer></script>
+</div>
+</body>
